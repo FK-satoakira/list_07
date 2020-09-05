@@ -7,9 +7,10 @@ public class Main {
         /* : */     // この間に計算処理を行う
         System.out.println("計算完了。結果をメモ帳で表示します");
         ProcessBuilder pb = new ProcessBuilder(
-            "c:\\wondows\\system32\\notepad.exe",   /* メモ帳の実行ファイル */
+            "c:\\windows\\system32\\notepad.exe",   /* メモ帳の実行ファイル */
             "calcreport.txt"
         );
         pb.start();     /* 起動！ */
     }
 }
+// 10行目のwindowsのiがoになってただけ
