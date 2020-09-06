@@ -1,38 +1,41 @@
 package list07;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("ご利用のjavaのバージョン");
-		System.out.println(System.getProperty("java.version"));
-		Properties p = System.getProperties();
-		List<String> list = new ArrayList<>();
+		Runtime r = Runtime.getRuntime();
+		long f = r.freeMemory();
+		long t = r.totalMemory();
+		long m = r.maxMemory();
+		System.out.println("f="+f);
+		System.out.println("t="+t);
+		System.out.println("m="+m);
 
-		Iterator<String> i = p.stringPropertyNames().iterator();
-		System.out.println("【システムプロパティ一覧】");
-		int n = 1;
-		while(i.hasNext()) {
-//			list.add(i.next());
-			System.out.print(n);
-			String key = i.next();
-			list.add(key);
-//			System.out.println(key);
-			System.out.print(key+"=");
-			System.out.println(p.get(key));
-			System.out.println((list.indexOf(key)+1)+key);
+		System.out.println(Runtime.getRuntime().freeMemory());
+		List<Integer> list = new ArrayList<>();
+		list.add(130776336);
+		list.add(130776208);
+		list.add(130776320);
+		list.add(130776272);
+		list.add(130776320);
+		list.add(130776304);
 
-//			System.out.print(key+"=");
-//			System.out.println(System.getProperty(key));
-//			System.out.print(key+"=");
-//			System.out.println(p.get(key));
-			n++;
+		list.add(132120576);
+		list.add(132120576);
+//		list.add();
+//		list.add();
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i));
 		}
+		System.out.println("");
+		System.out.println("f="+f);
+		System.out.println("t="+t);
+		System.out.println("m="+m);
+
 	}
 }
 
-// System.getProperty(key) と p.get(key)は同じく扱えた。
-//stringPropertyNames()をコレクションに入れることも可
+//OSからのメモリ追加は自動。Runtimeはインスタンス化が必要と書いてあったが、無くてもいけた。
+
