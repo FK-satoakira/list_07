@@ -1,41 +1,32 @@
 package list07;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
 public class Main {
-	public static void main(String[] args) {
-		Runtime r = Runtime.getRuntime();
-		long f = r.freeMemory();
-		long t = r.totalMemory();
-		long m = r.maxMemory();
-		System.out.println("f="+f);
-		System.out.println("t="+t);
-		System.out.println("m="+m);
+	public static void main(String[] args) throws Exception {
+		Class<?> clazz = Hero.class;
+		// 引数1つのコンストラクタを取得し、インスタンスを生成する
+//		おそらく [Hero h = new Hero("name",hp);]と同じと考えていいだろう。
+//		なので「getConstructor()」の()の引数は揃えるべき。
+		Constructor<?> cons = clazz.getConstructor(String.class,int.class);
 
-		System.out.println(Runtime.getRuntime().freeMemory());
-		List<Integer> list = new ArrayList<>();
-		list.add(130776336);
-		list.add(130776208);
-		list.add(130776320);
-		list.add(130776272);
-		list.add(130776320);
-		list.add(130776304);
+//		ここも引数は揃えるべきだろう。「newInstance("akira",256)」
+		Hero rs = (Hero) cons.newInstance("akira",256);
+		System.out.println(rs);
+		// timesフィールドに関するFieldを取得して読み書き
 
-		list.add(132120576);
-		list.add(132120576);
-//		list.add();
-//		list.add();
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i));
-		}
-		System.out.println("");
-		System.out.println("f="+f);
-		System.out.println("t="+t);
-		System.out.println("m="+m);
-
+//		HeroフィールドをprivateにするとFieldがつかえなくなるっぽい。
+		Field f = rs.getClass().getDeclaredField("hp");
+//		f.setInt(rs, 20000);                 // rsのtimesに代入
+		System.out.println(f.get(rs)); // rsのtimesを取得
+//		// 引数2つのhelloメソッドを取得して呼び出す
+//		Method m = clazz.getMethod("hello", String.class, int.class);
+//		m.invoke(rs, "reflection!", 128);
+//		// クラスやメソッドへの修飾（publicやfinalの有無）を調べる
+//		boolean pubc = Modifier.isPublic(clazz.getModifiers());
+//		boolean finm = Modifier.isFinal(m.getModifiers());
 	}
 }
 
-//OSからのメモリ追加は自動。Runtimeはインスタンス化が必要と書いてあったが、無くてもいけた。
 
