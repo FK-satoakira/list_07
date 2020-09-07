@@ -2,31 +2,51 @@ package list07;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class Main {
 	public static void main(String[] args) throws Exception {
 		Class<?> clazz = Hero.class;
-		// 引数1つのコンストラクタを取得し、インスタンスを生成する
-//		おそらく [Hero h = new Hero("name",hp);]と同じと考えていいだろう。
-//		なので「getConstructor()」の()の引数は揃えるべき。
-		Constructor<?> cons = clazz.getConstructor(String.class,int.class);
+//		引数1つのコンストラクタを取得し、インスタンスを生成する。
+//		今のところgetConstructor()とnewInstance()は2つで１つと考えたほうがいい。
+//		ので、引数を揃える。
+		Constructor<?> cons = clazz.getConstructor(int.class);
+		Hero hero = (Hero) cons.newInstance(55);
+		System.out.println("name=\"HERO\",hp=55としてインスタンスを作る。");
+		System.out.println(hero);
+		// Fieldを取得して読み書き
+//		public→getField("フィールド名");
+//		private→getDeclaredField("フィールド名");
+		Field f1 = clazz.getDeclaredField("name");
+		Field f2 = clazz.getDeclaredField("hp");
 
-//		ここも引数は揃えるべきだろう。「newInstance("akira",256)」
-		Hero rs = (Hero) cons.newInstance("akira",256);
-		System.out.println(rs);
-		// timesフィールドに関するFieldを取得して読み書き
+		f1.setAccessible(true); /*setAccessible()でtrueとともに呼び出さないとprivateにはアクセス不可と思われる*/
+		f2.setAccessible(true);
+		System.out.print(f1.get(hero)+" ");	System.out.print(f2.get(hero));
+		System.out.println("");
+		f1.set(hero, "taro");
+		f2.set(hero, 40); 	/*フィールドに新たに値を代入。	フィールド.set(クラスのインスタンス,値)*/
+		System.out.println("-----");
+		System.out.println("\"taro\",40に変更");
+		System.out.print(f1.get(hero)+" ");	System.out.print(f2.get(hero));
+		System.out.println("");
+		System.out.println("-----");
 
-//		HeroフィールドをprivateにするとFieldがつかえなくなるっぽい。
-		Field f = rs.getClass().getDeclaredField("hp");
-//		f.setInt(rs, 20000);                 // rsのtimesに代入
-		System.out.println(f.get(rs)); // rsのtimesを取得
-//		// 引数2つのhelloメソッドを取得して呼び出す
-//		Method m = clazz.getMethod("hello", String.class, int.class);
-//		m.invoke(rs, "reflection!", 128);
-//		// クラスやメソッドへの修飾（publicやfinalの有無）を調べる
-//		boolean pubc = Modifier.isPublic(clazz.getModifiers());
+
+		Method m = clazz.getMethod("evolution"); /*引数無しのevolutionメソッドをmに代入してる*/
+		Method m2 = clazz.getMethod("evolution",String.class);/*引数がString一個のevolutionメソッドをm2に代入してる*/
+		System.out.println("メソッドでスーパーヒーローに進化");
+		m.invoke(hero); /*invoke()でそのメソッドを使う。引数にインスタンスの変数の入れる*/
+
+		System.out.print(f1.get(hero)+" ");	System.out.print(f2.get(hero));
+		System.out.println("");System.out.println("-----");
+		System.out.println("メソッドでウルトラヒーローに進化");
+
+		m2.invoke(hero, "sukkiri"); /*そのメソッドに引数がある場合は""で囲み渡す*/
+		System.out.print(f1.get(hero)+" ");	System.out.print(f2.get(hero));
+		// クラスやメソッドへの修飾（publicやfinalの有無）を調べる
+		boolean pubc = Modifier.isPublic(clazz.getModifiers());
 //		boolean finm = Modifier.isFinal(m.getModifiers());
 	}
 }
-
-
